@@ -3,6 +3,7 @@ import styled from 'styled-components'
 const MainContainer = styled.div`
     width: 120px;
     height: 150px;
+    margin-bottom: 20px;
     position: relative;
     cursor: pointer;
 `
@@ -109,7 +110,7 @@ const InPartyNumber = styled.div`
 export default function CharacterPane( props: any ){
 
     const { 
-        charName, 
+        character, 
         charLevel, 
         constellation, 
         isOwned,
@@ -119,16 +120,16 @@ export default function CharacterPane( props: any ){
     return (
         <MainContainer>
             <TopLeftBox>
-                <img src="/images/elements/hydro.png" width="30" height="30" />
+                <img src={`/images/elements/${character.element}.png`} width="30" height="30" />
             </TopLeftBox>
             <BottomLeftBox>
                 
             </BottomLeftBox>
             <BottomRightBox>
-                <img src="/images/weapons/favonius_warbow.png" width="30" height="30" />
+                <img src="/images/weapons/favonius_warbow.jpeg" width="30" height="30" />
             </BottomRightBox>
             <CharacterBox>
-                <img src={`/images/characters/${charName}.png`} />
+                <img src={`/images/characters/${character.name_en}.png`} width="100%" height="100%" />
             </CharacterBox>
             <BottomBox>
                 <BottomText>
