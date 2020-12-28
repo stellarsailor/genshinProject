@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useTranslation, Router, Link } from '../i18n';
 
 const MainContainer = styled.div`
     width: 120px;
@@ -6,13 +7,31 @@ const MainContainer = styled.div`
     margin-bottom: 20px;
     position: relative;
     cursor: pointer;
+    @media (max-width: 1200px) {
+        width: 100px;
+        height: 130px;
+    }
+    @media (max-width: 768px) {
+        width: 80px;
+        height: 120px;
+    }
+    &:hover {
+        /* width: 130px;
+        height: 160px; */
+    }
 `
 
 const TopLeftBox = styled.div`
+    width: 30px;
+    height: 30px;
     top: 2px;
     left: 2px;
     position: absolute;
     z-index: 10;
+    @media (max-width: 768px) {
+        width: 20px;
+        height: 20px;
+    }
 `
 
 const BottomLeftBox = styled.div`
@@ -24,21 +43,30 @@ const BottomLeftBox = styled.div`
     font-weight: bold;
 `
 
-const BottomRightBox = styled.div`
+const BottomWeaponNameBox = styled.div`
     background-color: rgba(0, 0, 0, 0.7);
     bottom: 30px;
-    right: 0px;
+    left: 0px;
     position: absolute;
     z-index: 10;
-    margin: 5px;
-    font-size: 20px;
+    margin: 0px;
+    padding-right: 2px;
+    font-size: 12px;
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @media (max-width: 768px) {
+        font-size: 8px;
+    }
 `
-
-const CharacterBox = styled.div`
+type starType = {
+    stars: number;
+}
+const CharacterBox = styled("div")<starType>`
     width: 100%;
     height: 100%;
-    background-color: orange;
+    background-color: ${props => props.stars === 5 ? '#9c6d35' : '#6d629a'};
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -66,36 +94,45 @@ const BottomText = styled.span`
     color: #4f576a;
     font-size: 20px;
     font-weight: bold;
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+    @media (max-width: 400px) {
+        font-size: 16px;
+    }
 `
 
-const ClickedTopBar = styled.div`
+type bgColorType = {
+    partyNumber: number;
+}
+const ClickedTopBar = styled("div")<bgColorType>`
     position: absolute;
     top: 0;
     width: 100%;
-    height: 10px;
-    margin-top: -6px;
-    background-color: #c0ff3f;
+    height: 5px;
+    margin-top: -2px;
+    background-color: ${props => props.partyNumber === 1 ? '#c0ff3f' : '#00a0e8'};
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    z-index: -10;
+    z-index: 1;
 `
 
-const ClickedBottomBar = styled.div`
+const ClickedBottomBar = styled("div")<bgColorType>`
     width: 100%;
     height: 10px;
     margin-top: -5px;
-    background-color: #c0ff3f;
+    background-color: ${props => props.partyNumber === 1 ? '#c0ff3f' : '#00a0e8'};
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    z-index: 0;
+    z-index: 1;
 `
 
-const InPartyNumber = styled.div`
+const InPartyNumber = styled("div")<bgColorType>`
     top: 0;
     right: 0;
     position: absolute;
     color: #32332e;
-    background-color: #c0ff3f;
+    background-color: ${props => props.partyNumber === 1 ? '#c0ff3f' : '#00a0e8'};
     width: 30px;
     height: 25px;
     display: flex;
@@ -105,45 +142,50 @@ const InPartyNumber = styled.div`
     border-bottom-left-radius: 5px;
     font-size: 20px;
     font-weight: bold;
+    z-index: 20;
+    @media (max-width: 768px) {
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+    }
 `
 
 export default function CharacterPane( props: any ){
+    const { t, i18n } = useTranslation()
 
     const { 
-        character, 
-        charLevel, 
-        constellation, 
-        isOwned,
-        isClicked 
+        char,
+        charInfo,
+        weaponInfo,
+        party0,
+        party1,
+        inParty
     } = props
 
     return (
         <MainContainer>
             <TopLeftBox>
-                <img src={`/images/elements/${character.element}.png`} width="30" height="30" />
+                <img src={`/images/elements/${charInfo.element}.png`} width="100%" height="100%" />
             </TopLeftBox>
-            <BottomLeftBox>
-                
-            </BottomLeftBox>
-            <BottomRightBox>
-                <img src="/images/weapons/favonius_warbow.jpeg" width="30" height="30" />
-            </BottomRightBox>
-            <CharacterBox>
-                <img src={`/images/characters/${character.name_en}.png`} width="100%" height="100%" />
+            <BottomWeaponNameBox>
+                <img src={`/images/weapons/${charInfo.weapon}.png`} width="20px" height="20px" />{weaponInfo[`name_${i18n.language}`]}
+            </BottomWeaponNameBox>
+            <CharacterBox stars={charInfo.stars}>
+                <img src={`/images/characters/${charInfo.name_en}.png`} width="100%" style={{marginBottom: 20}} />
             </CharacterBox>
             <BottomBox>
                 <BottomText>
-                C{constellation} / Lv.{charLevel}
+                C{char.constellation} / Lv.{char.level}
                 </BottomText>
             </BottomBox>
             {
-                isClicked && 
+                !inParty && (party0.includes(char.charId) || party1.includes(char.charId)) &&
                 <>
-                    <InPartyNumber>
-                        1
+                    <InPartyNumber partyNumber={party0.includes(char.charId) ? 1 : 2}>
+                        {party0.includes(char.charId) ? party0.findIndex(v => v === char.charId) + 1 : party1.findIndex(v => v === char.charId) + 1}
                     </InPartyNumber>
-                    <ClickedTopBar />
-                    <ClickedBottomBar />
+                    <ClickedTopBar partyNumber={party0.includes(char.charId) ? 1 : 2} />
+                    <ClickedBottomBar partyNumber={party0.includes(char.charId) ? 1 : 2} />
                 </>
             }
         </MainContainer>
