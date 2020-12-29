@@ -9,6 +9,7 @@ import Header from '../components/Header'
 
 const GlobalStyle = createGlobalStyle`
   body {
+    font-family: 'Noto Sans', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -45,7 +46,7 @@ function MyApp({ Component, pageProps }) {
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Header />
-        <Component {...pageProps} assets={assets} />
+        { assets.length !== 0 && <Component {...pageProps} assets={assets} /> } 
       </ThemeProvider>
     </>
   )

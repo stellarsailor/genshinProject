@@ -173,15 +173,17 @@ export default function CharacterPane( props: any ){
             <TopLeftBox>
                 <img src={`/images/elements/${charInfo.element}.png`} width="100%" height="100%" />
             </TopLeftBox>
-            <BottomWeaponNameBox>
-                <img src={`/images/weapons/${charInfo.weapon}.png`} width="20px" height="20px" />{weaponInfo[`name_${i18n.language}`]}
-            </BottomWeaponNameBox>
+            { weaponInfo && 
+                <BottomWeaponNameBox>
+                    <img src={`/images/weapons/${charInfo.weapon}.png`} width="20px" height="20px" />{weaponInfo[`name_${i18n.language}`]}
+                </BottomWeaponNameBox>
+            }
             <CharacterBox stars={charInfo.stars}>
                 <img src={`/images/characters/${charInfo.name_en}.png`} width="100%" style={{marginBottom: 20}} />
             </CharacterBox>
             <BottomBox>
                 <BottomText>
-                C{char.constellation} / Lv.{char.level}
+                Lv.{char.level} / C{char.constellation}
                 </BottomText>
             </BottomBox>
             {

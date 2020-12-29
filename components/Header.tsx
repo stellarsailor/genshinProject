@@ -1,3 +1,4 @@
+import { Col, Row } from 'react-grid-system';
 import styled from 'styled-components'
 import { useTranslation, Router, Link } from '../i18n';
 
@@ -8,13 +9,24 @@ const HeaderPane = styled.div`
     border-bottom: 1px solid #323430;
 `
 
+const HeaderHomeButton = styled.span`
+    font-size: 24px;
+    cursor: pointer;
+`
+
 export default function Header() {
 
     return (
         <HeaderPane>
-            <Link href="/">
-                Home
-            </Link>
+            <Row nogutter justify="center">
+                <Col md={10}>
+                    <Link href="/">
+                        <HeaderHomeButton>
+                            Genshin Party
+                        </HeaderHomeButton>
+                    </Link>
+                </Col>
+            </Row>
         </HeaderPane>
     )
 }
