@@ -6,6 +6,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import styled from 'styled-components'
 import { serverUrl } from '../lib/serverUrl'
 import { useTranslation } from '../i18n'
+import dynamicSort from '../logics/dynamicSort'
+import compare from '../logics/compare'
 
 type charPoolType = {
     level: number;
@@ -19,9 +21,11 @@ type selectedType = {
 }
 const PartyBox = styled("div")<selectedType>`
     width: 100%;
-    background-color: #59657d;
-    border: ${props => props.selected ? '2px solid white' : 'none' };
+    min-height: 180px;
+    background-color: #49556d;
+    border: ${props => props.selected ? '2px solid white' : '2px solid rgba(0,0,0,0)' };
     padding: 5px;
+    margin: 16px 0px;
     border-radius: 5px;
     z-index: 0;
 `
@@ -35,6 +39,7 @@ export default function PartyDetail(props) {
     const weaponList = props.assets.length === 0 ? [] : props.assets.weapons
 
     const [ charPoolList, setCharPoolList ] = useState<Array<charPoolType>>([])
+    // const [ sortBy, setSortBy ] = useState('level') // level, stars, name, constellation
 
     const [ selectedPartyNumber, setSelectedPartyNumber ] = useState<number>(0)
     const [ party0, setParty0 ] = useState<Array<number>>([])
@@ -85,6 +90,7 @@ export default function PartyDetail(props) {
         <Row nogutter justify="center">
             <div>
                 3. 파티 구성 (여기서 레벨별, 레어도별 필터가능 / 자동추천 기능 - 1번 캐릭을 선택해야만 추천됨 / 링크공유하기 기능 - 받은사람은 바로 3번탭부터 / 캡쳐 기능)
+                
                 <CopyToClipboard text={serverUrl + router.asPath}
                 onCopy={() => console.log('success')}>
                     <span style={{width: '100%'}}>
@@ -95,14 +101,15 @@ export default function PartyDetail(props) {
             <Col xs={12} sm={12} md={12} lg={7} style={{padding: '1rem'}}>
                 <Row nogutter>
                     { charPoolList.length !== 0 && characterList.length !== 0 && weaponList.length !== 0 
-                    && charPoolList.map(char => (
-                        <Col xs={3} sm={3} md={3} onClick={() => addCharToParty(char.charId, selectedPartyNumber)}>
+                    && charPoolList.sort(dynamicSort("-level")).map(char => (
+                        <Col xs={3} sm={3} md={3} lg={2} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                             <CharacterPane 
                             char={char}
                             charInfo={characterList[char.charId]}
                             weaponInfo={weaponList[char.weaponId]}
                             party0={party0}
                             party1={party1}
+                            onClick={() => addCharToParty(char.charId, selectedPartyNumber)}
                             />
                         </Col>
                     ))}
@@ -113,7 +120,7 @@ export default function PartyDetail(props) {
                     전반
                     <Row nogutter>
                         {party0.map((charId, index) => (
-                            <Col xs={3} sm={3} md={3} onClick={() => selectedPartyNumber === 0 ? addCharToParty(charId, selectedPartyNumber) : instaDeploy(charId)}>
+                            <Col xs={3} sm={3} md={3} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                                 <CharacterPane 
                                 char={charPoolList.filter(v => v.charId === charId)[0]}
                                 charInfo={characterList[charId]}
@@ -121,6 +128,7 @@ export default function PartyDetail(props) {
                                 party0={party0}
                                 party1={party1}
                                 inParty={true}
+                                onClick={() => selectedPartyNumber === 0 ? addCharToParty(charId, selectedPartyNumber) : instaDeploy(charId)}
                                 />
                             </Col>
                         ))}
@@ -130,7 +138,7 @@ export default function PartyDetail(props) {
                     후반
                     <Row nogutter>
                         {party1.map((charId, index) => (
-                            <Col xs={3} sm={3} md={3} onClick={() => selectedPartyNumber === 1 ? addCharToParty(charId, selectedPartyNumber) : instaDeploy(charId)}>
+                            <Col xs={3} sm={3} md={3} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                                 <CharacterPane 
                                 char={charPoolList.filter(v => v.charId === charId)[0]}
                                 charInfo={characterList[charId]}
@@ -138,6 +146,7 @@ export default function PartyDetail(props) {
                                 party0={party0}
                                 party1={party1}
                                 inParty={true}
+                                onClick={() => selectedPartyNumber === 1 ? addCharToParty(charId, selectedPartyNumber) : instaDeploy(charId)}
                                 />
                             </Col>
                         ))}
@@ -148,6 +157,10 @@ export default function PartyDetail(props) {
                 </div>
                 <div>
                     Complete Party
+                </div>
+                <div>
+                    Recommended(Saved) Party List
+                    ㅁㅁㅁㅁ +3 Apply Share
                 </div>
             </Col>
         </Row>

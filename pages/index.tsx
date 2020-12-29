@@ -14,7 +14,7 @@ export default function Home() {
       <Title>
         Genshin Party Helper
       </Title>
-      <Link href="/party" >
+      <Link href="/create" >
         파티 만들기
       </Link>
     </>

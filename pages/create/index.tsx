@@ -5,6 +5,7 @@ import CharacterPane from '../../components/CharacterPane'
 import CharacterSetting from '../../components/CharacterSetting'
 // import { characters } from '../../datas/characterList'
 import { serverUrl } from '../../lib/serverUrl'
+import { Col, Row } from 'react-grid-system';
 
 export default function PartyMakePage(props) {
     const { t, i18n } = useTranslation()
@@ -38,24 +39,25 @@ export default function PartyMakePage(props) {
     },[characterPool])
 
     return(
-        <div>
-            <div>
-                {t("MESSAGE_MAKE_CHARACTERPOOL")}
-            </div>
-            {characterList.map(character => (
-                <CharacterSetting 
-                lang={i18n.language}
-                character={character}
-                weapons={weaponList}
-                selectedCharsId={selectedCharsId}
-                setSelectedCharsId={setSelectedCharsId}
-                characterPool={characterPool}
-                setCharacterPool={setCharacterPool}
-                />
-            ))}
+        <Row nogutter justify="center">
+            <Col xs={12} sm={8} md={6}>
+                <div>
+                    {t("MESSAGE_MAKE_CHARACTERPOOL")}
+                </div>
+                {characterList.map(character => (
+                    <CharacterSetting 
+                    lang={i18n.language}
+                    character={character}
+                    weapons={weaponList}
+                    selectedCharsId={selectedCharsId}
+                    setSelectedCharsId={setSelectedCharsId}
+                    characterPool={characterPool}
+                    setCharacterPool={setCharacterPool}
+                    />
+                ))}
 
-            <input type="button" value="submit" onClick={submitCharacterPool} />
-
-        </div>
+                <input type="button" value="submit" onClick={submitCharacterPool} />
+            </Col>
+        </Row>
     )
 }

@@ -6,6 +6,7 @@ const MainContainer = styled.div`
     height: 150px;
     margin-bottom: 20px;
     position: relative;
+    border: 2px solid rgba(0, 0, 0, 0);
     cursor: pointer;
     @media (max-width: 1200px) {
         width: 100px;
@@ -15,9 +16,13 @@ const MainContainer = styled.div`
         width: 80px;
         height: 120px;
     }
+    transition: transform .3s;
     &:hover {
         /* width: 130px;
         height: 160px; */
+        border: 2px solid white;
+        border-radius: 5px;
+        transform: scale(1.03);
     }
 `
 
@@ -159,11 +164,12 @@ export default function CharacterPane( props: any ){
         weaponInfo,
         party0,
         party1,
-        inParty
+        inParty,
+        onClick
     } = props
 
     return (
-        <MainContainer>
+        <MainContainer onClick={onClick}>
             <TopLeftBox>
                 <img src={`/images/elements/${charInfo.element}.png`} width="100%" height="100%" />
             </TopLeftBox>

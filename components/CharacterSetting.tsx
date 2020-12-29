@@ -27,7 +27,7 @@ export default function CharacterSetting( props: any ){
             setCharacterPool(characterPool.filter( v => v.charId !== clickedCharId))
         } else {
             setSelectedCharsId([...selectedCharsId, clickedCharId])
-            setCharacterPool([...characterPool, { charId: clickedCharId, level: 0, constellation: 0, weaponId: 0 }])
+            setCharacterPool([...characterPool, { charId: clickedCharId, level: 1, constellation: 0, weaponId: 0 }])
         }
     },[selectedCharsId, characterPool])
 

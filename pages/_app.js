@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #17132e;
+    background-color: #1d1f29;
     color: white;
   }
 `
