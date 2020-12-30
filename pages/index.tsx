@@ -1,16 +1,25 @@
+import { Col, Row } from 'react-grid-system';
 import styled from 'styled-components'
 import { useTranslation, Router, Link } from '../i18n';
 
-const Title = styled.h1`
+const Title = styled.div`
   font-size: 50px;
-  color: ${({ theme }) => theme.colors.primary};
+  font-weight: 200;
+  letter-spacing: 4px;
+  color: white;//${({ theme }) => theme.colors.primary};
+  margin-top: 30%;
+`
+
+const SubTitle = styled.div`
+  font-size: 20px;
 `
 
 const CustomButton = styled.div`
   width: 200px;
   height: 55px;
+  margin-top: 2rem;
   margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 4rem;
   border-radius: 8px;
   background-color: #ebe5d7;
   border: 1px solid #42495b;
@@ -28,20 +37,46 @@ const CustomButton = styled.div`
   }
 `
 
+const MainBackground = styled.div`
+  position: absolute;
+  top: 30%;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-image: url('/images/screenshot.png');
+  background-position: top;
+  background-size: contain;
+  background-repeat: no-repeat;
+`
+
 export default function Home() {
   const { t, i18n } = useTranslation()
 
   return (
-    <>
-      <Title>
-        Genshin Party Helper
-      </Title>
-      This website help you make Genshin party and share to others easily. Others can make your party instead!
-      <Link href="/create" >
-        <CustomButton>
-         {t("CREATE_MY_PARTY")}
-        </CustomButton>
-      </Link>
-    </>
+    <Row nogutter justify="center">
+      <Col md={10} style={{padding: 8, zIndex: 5, minHeight: '90vh'}}>
+        <Row nogutter>
+          <Col sm={12} md={12} lg={7} >
+            <Title>
+              GENSHIN PARTY HELPER
+            </Title>
+            <SubTitle>
+              This website helps you make Genshin party easily and share to others.
+            </SubTitle>
+            <Link href="/create" >
+              <CustomButton>
+              {t("CREATE_MY_PARTY")}
+              </CustomButton>
+            </Link>
+          </Col>
+          <Col sm={12} md={12} lg={5} >
+            <div style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem'}}>
+              <img src="/images/screenshot.png" style={{width: '100%', alignSelf: 'center',}} />  
+            </div>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   )
 }

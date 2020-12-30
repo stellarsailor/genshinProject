@@ -9,6 +9,7 @@ import { appWithTranslation } from '../i18n'
 import { serverUrl } from "../lib/serverUrl";
 
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -61,6 +62,7 @@ function MyApp({ Component, pageProps }) {
         <AlertProvider template={AlertTemplate} {...options}>
         <Header />
         { assets.length !== 0 && <Component {...pageProps} assets={assets} /> } 
+        <Footer />
         </AlertProvider>
       </ThemeProvider>
     </>

@@ -9,8 +9,11 @@ const HeaderPane = styled.div`
     border-bottom: 1px solid #323430;
 `
 
-const HeaderHomeButton = styled.span`
-    font-size: 24px;
+const HeaderHomeButton = styled.div`
+    height: 50px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
     cursor: pointer;
 `
 
@@ -22,7 +25,7 @@ export default function Header() {
                 <Col md={10}>
                     <Link href="/">
                         <HeaderHomeButton>
-                            Genshin Party
+                            <img src="/images/logo.png" height={40} /> 
                         </HeaderHomeButton>
                     </Link>
                 </Col>
