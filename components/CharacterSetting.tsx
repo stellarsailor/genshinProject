@@ -56,7 +56,7 @@ export default function CharacterSetting( props: any ){
     return(
         <Row nogutter 
         style={{marginBottom: 8, backgroundColor: selectedCharsId.includes(character.id) ? '#121420' : 'rgb(34, 36, 48)', padding: 8, borderRadius: 5}}>
-            <Col md={12}>
+            <Col md={12} onClick={() => handleCharacterPool(character.id)} >
                 {character[`name_${lang}`]}
             </Col>
             <Col md={12} style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>

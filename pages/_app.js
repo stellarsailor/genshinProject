@@ -1,6 +1,9 @@
 import App from "next/app";
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { transitions, positions, Provider as AlertProvider } from 'react-alert'
+import AlertTemplate from 'react-alert-template-basic'
 
 import { appWithTranslation } from '../i18n'
 import { serverUrl } from "../lib/serverUrl";
@@ -24,6 +27,13 @@ const theme = {
   },
 }
 
+const options = {
+  position: positions.BOTTOM_CENTER,
+  timeout: 3000,
+  offset: '50px',
+  transition: transitions.SCALE
+}
+
 function MyApp({ Component, pageProps }) {
   
   const [ assets, setAssets ] = useState([])
@@ -45,8 +55,13 @@ function MyApp({ Component, pageProps }) {
     <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        </Head>
+        <AlertProvider template={AlertTemplate} {...options}>
         <Header />
         { assets.length !== 0 && <Component {...pageProps} assets={assets} /> } 
+        </AlertProvider>
       </ThemeProvider>
     </>
   )

@@ -1,3 +1,12 @@
 {
-    "MESSAGE_MAKE_CHARACTERPOOL": "Make your character pool. Enter the constellation and level, weapon(option)."
+    "CREATE_MY_PARTY": "Create My Party",
+    "MESSAGE_MAKE_CHARACTERPOOL": "Make your character pool. Enter the constellation and level, weapon(option).",
+    "PARTY_FIRST_HALF": "First Half",
+    "PARTY_SECOND_HALF": "Second Half",
+    "PARTY_AUTOGENERATE": "Auto Generate",
+    "PARTY_PARTY_AUTOGENERATE_MSG": "Will be added after data is collected!",
+    "PARTY_SAVE": "Save Completed Party",
+    "PARTY_SAVE_ERROR_MSG": "Please Complete Party!",
+    "PARTY_SHARE": "Share This Page/Party",
+    "PARTY_SAVED_LIST": "Saved(Recommended) Party List"
 }

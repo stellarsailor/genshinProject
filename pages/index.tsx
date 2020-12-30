@@ -6,27 +6,30 @@ const Title = styled.h1`
   color: ${({ theme }) => theme.colors.primary};
 `
 
-const PrimaryButton = styled.div`
-  width: 250px;
-  height: 60px;
-  background-color: white;
-  color: black;
-  border: 1px solid gray;
-  border-radius: 5px;
+const CustomButton = styled.div`
+  width: 200px;
+  height: 55px;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background-color: #ebe5d7;
+  border: 1px solid #42495b;
+  color: #42495b;
+  font-size: 18px;
+  font-weight: 800;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: 0.2s linear;
-  &:hover {
-    color: white;
-    background-color: dodgerblue;
-    border: 1px solid black;
-  }
+  text-align: center;
   cursor: pointer;
+  transition: .2s linear;
+  &:hover{
+      background-color: white;       
+  }
 `
 
 export default function Home() {
-
+  const { t, i18n } = useTranslation()
 
   return (
     <>
@@ -35,9 +38,9 @@ export default function Home() {
       </Title>
       This website help you make Genshin party and share to others easily. Others can make your party instead!
       <Link href="/create" >
-        <PrimaryButton>
-         파티 만들기
-        </PrimaryButton>
+        <CustomButton>
+         {t("CREATE_MY_PARTY")}
+        </CustomButton>
       </Link>
     </>
   )

@@ -100,10 +100,10 @@ const BottomText = styled.span`
     font-size: 20px;
     font-weight: bold;
     @media (max-width: 768px) {
-        font-size: 18px;
+        font-size: 16px;
     }
     @media (max-width: 400px) {
-        font-size: 16px;
+        font-size: 14px;
     }
 `
 
@@ -183,7 +183,7 @@ export default function CharacterPane( props: any ){
             </CharacterBox>
             <BottomBox>
                 <BottomText>
-                Lv.{char.level} / C{char.constellation}
+                Lv.{char.level} / {i18n.language === 'en' && 'C'}{char.constellation}{i18n.language === 'ko' && '돌'}
                 </BottomText>
             </BottomBox>
             {
