@@ -76,7 +76,7 @@ export default function PartyMakePage(props) {
     return(
         <Row nogutter justify="center" >
             <Col xs={12} sm={8} md={6} style={{backgroundColor: '#222430', padding: '1rem', margin: '1rem 0px'}}>
-                <div>
+                <div style={{marginBottom: '2rem', fontSize: 18, borderLeft: '3px solid #c0ff3f', paddingLeft: 8}}>
                     {t("MESSAGE_MAKE_CHARACTERPOOL")}
                 </div>
                 {characterList.map((character, index) => (

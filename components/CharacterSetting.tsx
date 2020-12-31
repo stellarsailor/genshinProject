@@ -1,19 +1,22 @@
 import { useCallback, useState } from 'react'
 import { Col, Row } from 'react-grid-system'
 import styled from 'styled-components'
+import { useTranslation } from '../i18n'
 
 type selectedType = {
     isSelected: boolean;
 }
 const ConstellationBox = styled("span")<selectedType>`
-    color: ${props => props.isSelected ? 'gold' : 'white'};
+    color: ${props => props.isSelected ? 'gold' : 'gray'};
+    font-weight: ${props => props.isSelected ? 'bold' : 'normal'};
     cursor: pointer;
-    margin: 0px 4px;
+    padding: 0px 4px;
 `
 
 const constellArray = [0, 1, 2, 3, 4, 5, 6]
 
 export default function CharacterSetting( props: any ){
+    const { t, i18n } = useTranslation()
 
     const { 
         lang,
@@ -56,11 +59,18 @@ export default function CharacterSetting( props: any ){
     return(
         <Row nogutter 
         style={{marginBottom: 8, backgroundColor: selectedCharsId.includes(character.id) ? '#121420' : 'rgb(34, 36, 48)', padding: 8, borderRadius: 5}}>
-            <Col md={12} onClick={() => handleCharacterPool(character.id)} >
-                {character[`name_${lang}`]}
+            <Col md={12}>
+                <span onClick={() => handleCharacterPool(character.id)} style={{cursor: 'pointer'}}>
+                    {character[`name_${lang}`]}
+                </span>
             </Col>
-            <Col md={12} style={{display: 'flex', flexDirection: 'row', cursor: 'pointer'}}>
-                <img src={`/images/characters/${character.name_en}.png`} width="40px" height="40px" style={{filter: selectedCharsId.includes(character.id) ? 'grayscale(0%)' : 'grayscale(100%)'}} onClick={() => handleCharacterPool(character.id)} />
+            <Col md={12} style={{display: 'flex', flexDirection: 'row'}}>
+                <img 
+                src={`/images/characters/${character.name_en}.png`} 
+                width="40px" 
+                height="40px" 
+                style={{cursor: 'pointer', filter: selectedCharsId.includes(character.id) ? 'grayscale(0%)' : 'grayscale(100%)'}} onClick={() => handleCharacterPool(character.id)} 
+                />
                 {
                     selectedCharsId.includes(character.id) &&
                     <span style={{marginLeft: 16}}>
@@ -74,7 +84,8 @@ export default function CharacterSetting( props: any ){
                         value={characterPool.filter(v => v.charId === character.id)[0].level} 
                         onChange={(e) => handleLevel(character.id, e.target.value)} />
 
-                        C {constellArray.map(constell => 
+                        {i18n.language === 'en' && 'C' } 
+                        {constellArray.map(constell => 
                             <ConstellationBox 
                             key={constell} 
                             onClick={() => handleConstellation(character.id, constell)} 
@@ -82,6 +93,7 @@ export default function CharacterSetting( props: any ){
                                 {constell}
                             </ConstellationBox>
                         )}
+                        {i18n.language === 'ko' && '돌' } 
                         </div>
                         <div>
                             Weapon
