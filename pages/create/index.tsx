@@ -34,6 +34,9 @@ export default function PartyMakePage(props) {
     const { t, i18n } = useTranslation()
     const alert = useAlert()
 
+    const [ submitLoading, setSubmitLoading ] = useState(false)
+    const [ titleInput, setTitleInput ] = useState<string>('')
+
     const [ selectedCharsId, setSelectedCharsId ] = useState<Array<number>>([])
     const [ characterPool, setCharacterPool ] = useState<Array<any>>([])
 
@@ -42,13 +45,19 @@ export default function PartyMakePage(props) {
 
     const submitCharacterPool = useCallback( async () => {
         let levelException = false
+        let noneException = false
+
+        if(characterPool.length === 0) noneException = true
         characterPool.map(v => {
             if(v.level < 1 || 90 < v.level) levelException = true
         })
 
         if(levelException){
             alert.error(t("CREATE_PARTY_LEVEL_ERROR"))
+        } else if (noneException){
+            alert.error(t("CREATE_PARTY_NONE_ERROR"))
         } else {
+            setSubmitLoading(true)
             let url = `${serverUrl}/api/pools`
     
             const settings = {
@@ -58,6 +67,7 @@ export default function PartyMakePage(props) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    title: titleInput,
                     characterPool: characterPool,
                 })
             }
@@ -71,12 +81,21 @@ export default function PartyMakePage(props) {
             }
         }
 
-    },[characterPool])
+    },[ titleInput, characterPool ])
 
     return(
         <Row nogutter justify="center" >
             <Col xs={12} sm={8} md={6} style={{backgroundColor: '#222430', padding: '1rem', margin: '1rem 0px'}}>
-                <div style={{marginBottom: '2rem', fontSize: 18, borderLeft: '3px solid #c0ff3f', paddingLeft: 8}}>
+                <div style={{marginBottom: 24}}>
+                    <div style={{fontSize: '1.3rem'}}>
+                        {t('MY_PARTY_TITLE')}   
+                    </div>
+                    <small>
+                        {t("MY_PARTY_TITLE_EXAMPLE")}
+                    </small>
+                    <input style={{width: '100%', height: 35, borderRadius: 8}} value={titleInput} onChange={e => setTitleInput(e.target.value)} />
+                </div>
+                <div style={{margin: '2rem 0px', fontSize: 18, borderLeft: '3px solid #c0ff3f', paddingLeft: 8}}>
                     {t("MESSAGE_MAKE_CHARACTERPOOL")}
                 </div>
                 {characterList.map((character, index) => (
@@ -93,7 +112,7 @@ export default function PartyMakePage(props) {
                 ))}
 
                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <CustomButton onClick={submitCharacterPool}>
+                    <CustomButton onClick={submitCharacterPool} style={{pointerEvents: submitLoading ? "none" : 'all'}}>
                         {t("CREATE_MY_PARTY")}
                     </CustomButton>
                 </div>

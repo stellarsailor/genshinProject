@@ -7,10 +7,11 @@ export default async (req, res) => {
     await cors(req, res)
 
     if(req.method === 'GET'){
+
         const uid = req.query.uid
 
         const query = escape`
-            SELECT list, createdAt
+            SELECT title, list, createdAt
             FROM pools
             WHERE uid = ${uid};
         `
@@ -28,19 +29,22 @@ export default async (req, res) => {
         res.status(200).json({ pool: pool, savedPartyList: savedPartyList})
 
     } else if(req.method === 'POST'){
+
+        const title = req.body.title
         const pool = req.body.characterPool
         const uid = createUID(12)
 
         const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
         const insertResult = await db.query(escape`
-            INSERT INTO pools (uid, list, ipAddress)
-            VALUES ( ${uid}, ${JSON.stringify(pool)}, ${ipAddress});
+            INSERT INTO pools (uid, title, list, ipAddress)
+            VALUES ( ${uid}, ${title}, ${JSON.stringify(pool)}, ${ipAddress});
         `)
     
         res.status(200).json({ result: insertResult, redirectUID: uid })
 
     } else if(req.method === 'PUT'){
+
         const uid = req.body.uid
         const compString = req.body.compString
         const compArray = req.body.compArray

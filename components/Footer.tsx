@@ -23,7 +23,7 @@ export default function Footer() {
         <FooterPane>
             <Row nogutter justify="center">
                 <Col md={10}>
-                    <Link href="/about">
+                    <Link href="/policy">
                         <CombinedButton>
                             Contact | Disclaimer | Privacy Policy
                         </CombinedButton>

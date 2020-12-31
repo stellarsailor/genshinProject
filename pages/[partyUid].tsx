@@ -30,6 +30,19 @@ type recommendedPartyType = {
     createdAt: string;
 }
 
+const ChangePartyModeButton = styled.div`
+    font-size: 14px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: lightgray;
+    &:hober{
+        color: white;
+    }
+`
+
 type selectedType = {
     selected: boolean;
 }
@@ -118,9 +131,11 @@ export default function PartyDetail(props) {
     const characterList = props.assets.length === 0 ? [] : props.assets.characters
     const weaponList = props.assets.length === 0 ? [] : props.assets.weapons
 
+    const [ title, setTitle ] = useState('')
     const [ charPoolList, setCharPoolList ] = useState<Array<charPoolType>>([])
     const [ savedPartyList, setSavedPartyList ] = useState<Array<recommendedPartyType>>([])
 
+    const [ partyMode, setPartyMode ] = useState(2)
     const [ selectedPartyNumber, setSelectedPartyNumber ] = useState<number>(0)
     const [ party0, setParty0 ] = useState<Array<number>>([])
     const [ party1, setParty1 ] = useState<Array<number>>([])
@@ -134,6 +149,7 @@ export default function PartyDetail(props) {
         const res = await fetch(url)
         const data = await res.json()
         
+        setTitle(data.pool.title)
         setCharPoolList(JSON.parse(data.pool.list))
         setSavedPartyList(data.savedPartyList)
     }
@@ -156,10 +172,20 @@ export default function PartyDetail(props) {
                 }
             }
             setParty0(party0premade)
-            setParty1(party1premade)
+            if(compString.length > 8) setParty1(party1premade) //party is only one
         }
         fetchPool()
     },[])
+
+    const togglePartyMode = useCallback(() => {
+        if(partyMode === 1){
+            setPartyMode(2)
+            setParty1([])
+        } else {
+            setPartyMode(1)
+            setParty1([])
+        }
+    },[partyMode])
 
     const createCurrentPartyString = useCallback(() => {
         return serverUrl + `/${i18n.language}/${partyUid}?p=` + makeCompString(party0, false) + makeCompString(party1, false)
@@ -199,7 +225,7 @@ export default function PartyDetail(props) {
 
     const saveThisParty = useCallback( async () => {
         setDisableButton(true)
-        if(party0.length !== 4 || party1.length !== 4){
+        if(party0.length !== 4 || ( partyMode === 2 && party1.length !== 4)){
             alert.error(t("PARTY_SAVE_ERROR_MSG"))
             return 0
         }
@@ -219,8 +245,8 @@ export default function PartyDetail(props) {
                 compArray: makeCompArray(fullPartyArray),
                 fhString: makeCompString(party0, true),
                 fhArray: makeCompArray(party0),
-                shString: makeCompString(party1, true),
-                shArray: makeCompArray(party1),
+                shString: partyMode === 2 ? makeCompString(party1, true) : "",
+                shArray: partyMode === 2 ? makeCompArray(party1) : "",
             })
         }
         try {
@@ -230,19 +256,20 @@ export default function PartyDetail(props) {
             if(data.result.affectedRows === 1){
                 fetchPool()
                 setDisableButton(false)
-                alert.success('Party is saved!')
+                alert.success(t("PARTY_SAVE_SUCCESS"))
             } else {
-                alert.error("Something's wrong... Try few minutes later")
+                alert.error(t("TRY_AGAIN_LATER"))
             }
         } catch (e) {
             return e;
         }
-    },[ party0, party1 ])
+    },[ party0, party1, partyMode ])
 
-    const applyFromRecommendedParty = ( fhArray, shArray ) => {
-
+    const applyFromRecommendedParty = useCallback((fhArray, shArray) => {
         setParty0(fhArray.split(',').map(Number))
-        setParty1(shArray.split(',').map(Number))
+        if(partyMode === 2 && shArray !== ''){
+            setParty1(shArray.split(',').map(Number))
+        }
 
         scroller.scrollTo( "PARTIES", {
             duration: 800,
@@ -250,18 +277,29 @@ export default function PartyDetail(props) {
             smooth: true,
             offset: -50, 
         })
-    }
+    },[ partyMode ])
+    
 
     return(
         <Row nogutter justify="center">
-            <div style={{width: '100%', textAlign: 'right', marginTop: '1rem', fontSize: '1.2rem'}}>
-                <CopyToClipboard text={createCurrentPartyString()} 
-                onCopy={() => alert.success('Link is copied!')}>
-                    <span style={{width: '100%', margin: '0px 1rem', cursor: 'pointer'}}>
-                        <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Sgare-White-Icon-PNG.png" width={15} style={{marginRight: 8}} />{t("PARTY_SHARE")}
-                    </span>
-                </CopyToClipboard>
-            </div>
+            <Row style={{width: '100%', marginTop: '1rem', display: "flex", flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Col sm={12} md={9} style={{fontSize: '1.4rem'}}>
+                    {title}
+                </Col>
+                <Col sm={12} md={3} >
+                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                        <CopyToClipboard 
+                        text={serverUrl + router.asPath} 
+                        onCopy={() => alert.success(t("LINK_COPY_SUCCESS"))}
+                        >
+                            <div style={{display: 'flex', flexDirection: 'row', marginTop: 8, marginRight: 16}}>
+                                <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Sgare-White-Icon-PNG.png" style={{width: 16, height: 16, marginRight: 8}} />
+                                {t("PARTY_SHARE_PAGE")}
+                            </div>
+                        </CopyToClipboard>
+                    </div>
+                </Col>
+            </Row>
             {
                 (charPoolList.length === 0 || characterList.length === 0 || weaponList.length === 0) 
                 ?
@@ -288,7 +326,9 @@ export default function PartyDetail(props) {
                         <div>
                             <Element name="PARTIES" />
                             <PartyBox selected={selectedPartyNumber === 0 ? true : false } onClick={() => setSelectedPartyNumber(0)}>
-                                <PartyNameColorIndicator partyNumber={0}>{t("PARTY_FIRST_HALF")}</PartyNameColorIndicator>
+                                <PartyNameColorIndicator partyNumber={0}>
+                                    { partyMode === 1 ? t("PARTY_MAIN") : t("PARTY_FIRST_HALF")}
+                                </PartyNameColorIndicator>
                                 <Row nogutter>
                                     {party0.length !== 0 && party0.map((charId, index) => (
                                         <Col xs={3} sm={3} md={3} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} key={charId}>
@@ -306,25 +346,42 @@ export default function PartyDetail(props) {
                                     ))}
                                 </Row>
                             </PartyBox>
-                            <PartyBox selected={selectedPartyNumber === 1 ? true : false} onClick={() => setSelectedPartyNumber(1)}>
-                                <PartyNameColorIndicator partyNumber={1}>{t("PARTY_SECOND_HALF")}</PartyNameColorIndicator>
-                                <Row nogutter>
-                                    {party1.length !== 0 && party1.map((charId, index) => (
-                                        <Col xs={3} sm={3} md={3} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} key={charId}>
-                                            <CharacterPane 
-                                            char={charPoolList.filter(v => v.charId === charId)[0]}
-                                            charInfo={characterList[charId]}
-                                            weaponInfo={charPoolList.filter(v => v.charId === charId)[0].weaponId !== '' 
-                                                && weaponList[charPoolList.filter(v => v.charId === charId)[0].weaponId]}
-                                            party0={party0}
-                                            party1={party1}
-                                            inParty={true}
-                                            onClick={() => selectedPartyNumber === 1 ? addCharToParty(charId, selectedPartyNumber) : instaDeploy(charId)}
-                                            />
-                                        </Col>
-                                    ))}
-                                </Row>
-                            </PartyBox>
+                            <ChangePartyModeButton onClick={togglePartyMode}>
+                                {t("CHANGE_PARTY_TYPE")}
+                            </ChangePartyModeButton>
+                            {
+                                partyMode === 2 &&
+                                <PartyBox selected={selectedPartyNumber === 1 ? true : false} onClick={() => setSelectedPartyNumber(1)}>
+                                    <PartyNameColorIndicator partyNumber={1}>
+                                        {t("PARTY_SECOND_HALF")}
+                                    </PartyNameColorIndicator>
+                                    <Row nogutter>
+                                        {party1.length !== 0 && party1.map((charId, index) => (
+                                            <Col xs={3} sm={3} md={3} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} key={charId}>
+                                                <CharacterPane 
+                                                char={charPoolList.filter(v => v.charId === charId)[0]}
+                                                charInfo={characterList[charId]}
+                                                weaponInfo={charPoolList.filter(v => v.charId === charId)[0].weaponId !== '' 
+                                                    && weaponList[charPoolList.filter(v => v.charId === charId)[0].weaponId]}
+                                                party0={party0}
+                                                party1={party1}
+                                                inParty={true}
+                                                onClick={() => selectedPartyNumber === 1 ? addCharToParty(charId, selectedPartyNumber) : instaDeploy(charId)}
+                                                />
+                                            </Col>
+                                        ))}
+                                    </Row>
+                                </PartyBox>
+                            }
+                            <CopyToClipboard 
+                            text={createCurrentPartyString()} 
+                            onCopy={() => alert.success(t("LINK_COPY_SUCCESS"))}
+                            >
+                                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 8, marginRight: 24, marginBottom: 24}}>
+                                    <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Sgare-White-Icon-PNG.png" style={{width: 16, height: 16, marginRight: 8}} />
+                                    {t("PARTY_SHARE_CURRENT_COMP")}
+                                </div>
+                            </CopyToClipboard>
                             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
                                 <CustomButton onClick={() => autoGenerateParty()}>
                                     {t("PARTY_AUTOGENERATE")}
@@ -353,17 +410,20 @@ export default function PartyDetail(props) {
                                                     )}
                                                 </Col>
                                                 <Col xs={6} sm={6} md={4} style={{display: 'flex', flexDirection: 'row'}}>
-                                                    {v.shArray.split(',').map(Number).map(charId => 
+                                                    { v.shArray !== '' && v.shArray.split(',').map(Number).map(charId => 
                                                         <CharacterPaneMini charName={characterList[charId].name_en} key={charId} />
                                                     )}
                                                 </Col>
                                                 <Col xs={6} sm={6} md={4} style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center'}}>
-                                                    <img src="https://genshin.honeyhunterworld.com/img/skills/fantastic_voyage.png" width={20} height={20} />
-                                                    {v.likes}
+                                                    <img src="/images/likes.png" width={20} height={20} />
+                                                    <span style={{color: '#cccccc'}}>{v.likes}</span>
                                                     <RecommendedPartyBoxButton onClick={() => applyFromRecommendedParty(v.fhArray, v.shArray)}>
                                                         Apply
                                                     </RecommendedPartyBoxButton>
-                                                    <CopyToClipboard text={serverUrl + `/${i18n.language}/${partyUid}?p=${v.fhArray.replaceAll(',', '') + v.shArray.replaceAll(',', '')}`} onCopy={() => alert.success('Link is copied!')}>
+                                                    <CopyToClipboard 
+                                                    text={serverUrl + `/${i18n.language}/${partyUid}?p=${v.fhArray.replaceAll(',', '') + v.shArray.replaceAll(',', '')}`} 
+                                                    onCopy={() => alert.success(t("LINK_COPY_SUCCESS"))}
+                                                    >
                                                         <RecommendedPartyBoxButton>
                                                             Share
                                                         </RecommendedPartyBoxButton>
