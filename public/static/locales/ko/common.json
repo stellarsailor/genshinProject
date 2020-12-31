@@ -1,6 +1,8 @@
 {
+    "MAIN_TEXT": "원신 파티 조합을 쉽게 구성하고 타인에게 공유할 수 있는 링크를 제공합니다!",
     "CREATE_MY_PARTY": "파티 만들기",
-    "MESSAGE_MAKE_CHARACTERPOOL": "먼저 보유한 캐릭터들을 선택해주세요. 별자리 돌파와 레벨, 무기(선택사항)를 채워넣어주세요.",
+    "MESSAGE_MAKE_CHARACTERPOOL": "보유한 캐릭터들을 선택해주세요. 캐릭터 레벨과 별자리 돌파, 그리고 무기(선택사항)를 입력해주세요.",
+    "CREATE_PARTY_LEVEL_ERROR": "캐릭터 레벨은 1 이상 90 이하 여야합니다.",
     "PARTY_FIRST_HALF": "전반부",
     "PARTY_SECOND_HALF": "후반부",
     "PARTY_AUTOGENERATE": "자동 완성",

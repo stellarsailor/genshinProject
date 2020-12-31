@@ -139,6 +139,7 @@ export default function PartyDetail(props) {
     }
     
     useEffect(() => {
+        scrollTo(0,0)
         if(router.query.p){
             let compString = router.query.p
 
@@ -264,7 +265,7 @@ export default function PartyDetail(props) {
             {
                 (charPoolList.length === 0 || characterList.length === 0 || weaponList.length === 0) 
                 ?
-                <div>Loading...</div>
+                <div style={{display: 'flex', justifyContent: "center", alignItems: 'center', minHeight: '100vh'}}>Loading...</div>
                 :
                 <>
                     <Col xs={12} sm={12} md={12} lg={7} style={{padding: '1rem', paddingBottom: 0}}>
@@ -283,7 +284,7 @@ export default function PartyDetail(props) {
                             ))}
                         </Row>
                     </Col>
-                    <Col xs={12} sm={12} md={12} lg={5} >
+                    <Col xs={12} sm={12} md={12} lg={5} style={{minHeight: '90vh'}}>
                         <div>
                             <Element name="PARTIES" />
                             <PartyBox selected={selectedPartyNumber === 0 ? true : false } onClick={() => setSelectedPartyNumber(0)}>
@@ -338,7 +339,7 @@ export default function PartyDetail(props) {
                                 </div>
                                 {
                                     savedPartyList.length === 0 &&
-                                    <div>
+                                    <div style={{width: '100%', minHeight: 150, display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'lightgray'}}>
                                         NO DATA
                                     </div>
                                 }

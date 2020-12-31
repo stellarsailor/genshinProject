@@ -12,6 +12,15 @@ const Title = styled.div`
 
 const SubTitle = styled.div`
   font-size: 20px;
+  margin-bottom: 1rem;
+`
+
+const SampleLink = styled.span`
+  color: dodgerblue;
+  &:hover{
+    color: white;
+  }
+  cursor: pointer;
 `
 
 const CustomButton = styled.div`
@@ -62,8 +71,13 @@ export default function Home() {
               GENSHIN PARTY HELPER
             </Title>
             <SubTitle>
-              This website helps you make Genshin party easily and share to others.
+              {t("MAIN_TEXT")}
             </SubTitle>
+            <Link href="/3bdb4893f246165e">
+              <SampleLink>
+                See Sample
+              </SampleLink>
+            </Link>
             <Link href="/create" >
               <CustomButton>
               {t("CREATE_MY_PARTY")}
@@ -72,7 +86,7 @@ export default function Home() {
           </Col>
           <Col sm={12} md={12} lg={5} >
             <div style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem'}}>
-              <img src="/images/screenshot.png" style={{width: '100%', alignSelf: 'center',}} />  
+              <img src="/images/screenshot.png" style={{width: '100%', alignSelf: 'center'}} />  
             </div>
           </Col>
         </Row>
