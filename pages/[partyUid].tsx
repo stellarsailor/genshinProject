@@ -10,6 +10,7 @@ import { useAlert } from 'react-alert'
 import dynamicSort from '../logics/dynamicSort'
 import makeCompString from '../logics/makeCompString'
 import makeCompArray from '../logics/makeCompArray'
+import hasDuplicates from '../logics/hasDuplicates'
 import CharacterPaneMini from '../components/CharacterPaneMini'
 import Scroll from 'react-scroll'
 
@@ -131,6 +132,7 @@ export default function PartyDetail(props) {
     const characterList = props.assets.length === 0 ? [] : props.assets.characters
     const weaponList = props.assets.length === 0 ? [] : props.assets.weapons
 
+    const [ poolId, setPoolId ] = useState(0)
     const [ title, setTitle ] = useState('')
     const [ charPoolList, setCharPoolList ] = useState<Array<charPoolType>>([])
     const [ savedPartyList, setSavedPartyList ] = useState<Array<recommendedPartyType>>([])
@@ -149,6 +151,7 @@ export default function PartyDetail(props) {
         const res = await fetch(url)
         const data = await res.json()
         
+        setPoolId(data.pool.id)
         setTitle(data.pool.title)
         setCharPoolList(JSON.parse(data.pool.list))
         setSavedPartyList(data.savedPartyList)
@@ -171,8 +174,14 @@ export default function PartyDetail(props) {
                     }
                 }
             }
-            setParty0(party0premade)
-            if(compString.length > 8) setParty1(party1premade) //party is only one
+            if(compString.length > 8) {
+                setPartyMode(2)
+                setParty0(party0premade)
+                setParty1(party1premade)
+            } else {
+                setPartyMode(1)
+                setParty0(party0premade)
+            }
         }
         fetchPool()
     },[])
@@ -229,6 +238,10 @@ export default function PartyDetail(props) {
             alert.error(t("PARTY_SAVE_ERROR_MSG"))
             return 0
         }
+        if(hasDuplicates(party0) || hasDuplicates(party1)){
+            alert.error(t("PARTY_SAVE_ERROR_MSG"))
+            return 0
+        }
         const fullPartyArray = party0.concat(party1)
 
         let url = `${serverUrl}/api/pools`
@@ -240,7 +253,7 @@ export default function PartyDetail(props) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                uid: partyUid,
+                pool_id: poolId,
                 compString: makeCompString(fullPartyArray, true),
                 compArray: makeCompArray(fullPartyArray),
                 fhString: makeCompString(party0, true),
@@ -255,8 +268,8 @@ export default function PartyDetail(props) {
 
             if(data.result.affectedRows === 1){
                 fetchPool()
-                setDisableButton(false)
                 alert.success(t("PARTY_SAVE_SUCCESS"))
+                setDisableButton(false)
             } else {
                 alert.error(t("TRY_AGAIN_LATER"))
                 setDisableButton(false)
@@ -267,8 +280,13 @@ export default function PartyDetail(props) {
     },[ party0, party1, partyMode ])
 
     const applyFromRecommendedParty = useCallback((fhArray, shArray) => {
-        setParty0(fhArray.split(',').map(Number))
-        if(partyMode === 2 && shArray !== ''){
+        if(shArray === '') {
+            setPartyMode(1)
+            setParty0(fhArray.split(',').map(Number))
+            setParty1([])
+        } else {
+            setPartyMode(2)
+            setParty0(fhArray.split(',').map(Number))
             setParty1(shArray.split(',').map(Number))
         }
 
@@ -290,10 +308,10 @@ export default function PartyDetail(props) {
                 <Col sm={12} md={3} >
                     <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                         <CopyToClipboard 
-                        text={serverUrl + router.asPath} 
+                        text={serverUrl + `/${i18n.language}/${partyUid}`} 
                         onCopy={() => alert.success(t("LINK_COPY_SUCCESS"))}
                         >
-                            <div style={{display: 'flex', flexDirection: 'row', marginTop: 8, marginRight: 16}}>
+                            <div style={{display: 'flex', flexDirection: 'row', marginTop: 8, marginRight: 16, cursor: 'pointer'}}>
                                 <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Sgare-White-Icon-PNG.png" style={{width: 16, height: 16, marginRight: 8}} />
                                 {t("PARTY_SHARE_PAGE")}
                             </div>
@@ -378,7 +396,7 @@ export default function PartyDetail(props) {
                             text={createCurrentPartyString()} 
                             onCopy={() => alert.success(t("LINK_COPY_SUCCESS"))}
                             >
-                                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 8, marginRight: 24, marginBottom: 24}}>
+                                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 8, marginRight: 24, marginBottom: 24, cursor: 'pointer'}}>
                                     <img src="https://www.searchpng.com/wp-content/uploads/2019/02/Sgare-White-Icon-PNG.png" style={{width: 16, height: 16, marginRight: 8}} />
                                     {t("PARTY_SHARE_CURRENT_COMP")}
                                 </div>
@@ -387,7 +405,7 @@ export default function PartyDetail(props) {
                                 <CustomButton onClick={() => autoGenerateParty()}>
                                     {t("PARTY_AUTOGENERATE")}
                                 </CustomButton>
-                                <CustomButton onClick={() => disableButton ? console.log('fetching...') : saveThisParty()}>
+                                <CustomButton onClick={() => disableButton ? alert.show('Loading...') : saveThisParty()}>
                                     {t("PARTY_SAVE")}
                                 </CustomButton>
                             </div>
