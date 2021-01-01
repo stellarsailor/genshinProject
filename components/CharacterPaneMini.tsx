@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import FirstLetterToLower from '../logics/FirstLetterToLower'
 
 const Pane = styled.div`
     border: 1px solid #222430; 
@@ -15,7 +16,7 @@ export default function CharacterPaneMini(props) {
 
     return(
         <Pane>
-            <img src={`/images/characters/${charName}.png`} style={{width: '100%', height: '100%'}} />
+            <img src={`/images/characters/${FirstLetterToLower(charName)}.png`} style={{width: '100%', height: '100%'}} />
         </Pane>
     )
 }

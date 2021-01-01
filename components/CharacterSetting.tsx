@@ -113,21 +113,25 @@ export default function CharacterSetting( props: any ){
                             style={{marginRight: '1rem'}} />
                             {
                                 includeWeapon &&
-                                <>
-                                    <select 
-                                    name="weapon" 
-                                    id="weapon" 
-                                    onChange={(e) => handleWeapon(character.id, e.target.value)} 
-                                    // value={characterPool.filter(v => v.charId === character.id)[0].weapon}
-                                    >
-                                        {weapons.filter(v => character.weapon === v.type || v.type === 'none').map((v, index) => (
-                                            <option value={v.id} key={index}>
-                                                {v[`name_${i18n.languages}`]}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </>
+                                <select 
+                                name="weapon" 
+                                id="weapon" 
+                                onChange={(e) => handleWeapon(character.id, e.target.value)} 
+                                value={characterPool.filter(v => v.charId === character.id)[0].weapon}
+                                >
+                                    {weapons.filter(v => character.weapon === v.type || v.type === 'none').map((v, index) => (
+                                        <option value={v.id} key={index}>
+                                            {v[`name_${i18n.languages}`]}
+                                        </option>
+                                    ))}
+                                </select>
+                                
                             }
+                            {weapons.filter(v => character.weapon === v.type || v.type === 'none').map((v, index) => (
+                                        <option value={v.id} key={index}>
+                                            {v[`name_${i18n.languages}`]}
+                                        </option>
+                                    ))}
                         </div>
                     </span>
                 }
