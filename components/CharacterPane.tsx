@@ -51,13 +51,16 @@ const BottomLeftBox = styled.div`
 
 const BottomWeaponNameBox = styled.div`
     background-color: rgba(0, 0, 0, 0.7);
+    height: 20px;
+    overflow: hidden;
     bottom: 30px;
     left: 0px;
     position: absolute;
     z-index: 10;
     margin: 0px;
     padding-right: 2px;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 90%;
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -169,6 +172,13 @@ export default function CharacterPane( props: any ){
         onClick
     } = props
 
+    const weaponbgColor = (stars) => {
+        if(stars === 5) return '#d29d51'
+        else if(stars === 4) return '#ad81c1'
+        else if(stars === 3) return '#4b94aa'
+        else return '#697481'
+    } 
+
     return (
         <MainContainer onClick={onClick}>
             <TopLeftBox>
@@ -176,7 +186,12 @@ export default function CharacterPane( props: any ){
             </TopLeftBox>
             { weaponInfo && 
                 <BottomWeaponNameBox>
-                    <img src={`/images/weapons/${charInfo.weapon}.png`} width="20px" height="20px" />{weaponInfo[`name_${i18n.language}`]}
+                {weaponInfo['type'] === 'none' ?
+                    <img src={`/images/weapons/${charInfo.weapon}.png`} width="20px" height="20px" style={{backgroundColor: weaponbgColor(weaponInfo.stars)}} />
+                    :
+                    <img src={`/images/weapons/${weaponInfo['type']}/${weaponInfo[`name_en`].replaceAll(' ', '_')}.png`} width="20px" height="20px" style={{backgroundColor: weaponbgColor(weaponInfo.stars)}} />
+                }
+                {weaponInfo[`name_${i18n.language}`]}  
                 </BottomWeaponNameBox>
             }
             <CharacterBox stars={charInfo.stars}>
