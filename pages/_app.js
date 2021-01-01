@@ -88,7 +88,7 @@ function MyApp({ Component, pageProps }) {
         </Head>
         <AlertProvider template={AlertTemplate} {...options}>
         <Header />
-        { assets.length !== 0 && <Component {...pageProps} assets={assets} /> } 
+          <Component {...pageProps} assets={assets} />
         <Footer />
         </AlertProvider>
       </ThemeProvider>
