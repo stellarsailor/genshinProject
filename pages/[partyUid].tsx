@@ -197,7 +197,9 @@ export default function PartyDetail(props) {
     },[partyMode])
 
     const createCurrentPartyString = useCallback(() => {
-        if(partyMode === 1){
+        if(party0.length === 0 && party1.length === 0){
+            return serverUrl + `/${i18n.language}/${partyUid}`
+        } else if (partyMode === 1){
             return serverUrl + `/${i18n.language}/${partyUid}?p=` + makeCompString(party0, false)
         } else {
             return serverUrl + `/${i18n.language}/${partyUid}?p=` + makeCompString(party0, false) + makeCompString(party1, false)

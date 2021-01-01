@@ -97,7 +97,7 @@ export default function CharacterSetting( props: any ){
                         {i18n.language === 'ko' && '돌' } 
                         </div>
                         <div>
-                            Weapon
+                            {t("CONST_WEAPON")}
                             <input type="checkbox" 
                             checked={includeWeapon} 
                             onChange={(e) => { 

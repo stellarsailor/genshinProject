@@ -18,6 +18,7 @@
     "PARTY_SHARE_PAGE": "Share This Page",
     "PARTY_SHARE_CURRENT_COMP": "Share Current Party",
     "PARTY_SAVED_LIST": "Saved(Recommended) Party List",
+    "CONST_WEAPON": "Weapon",
     "TRY_AGAIN_LATER": "Something's wrong... Try few minutes later",
     "LINK_COPY_SUCCESS": "Link is copied!"
 }

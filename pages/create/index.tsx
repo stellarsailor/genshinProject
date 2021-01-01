@@ -37,8 +37,8 @@ export default function PartyMakePage(props) {
     const [ submitLoading, setSubmitLoading ] = useState(false)
     const [ titleInput, setTitleInput ] = useState<string>('')
 
-    const [ selectedCharsId, setSelectedCharsId ] = useState<Array<number>>([])
-    const [ characterPool, setCharacterPool ] = useState<Array<any>>([])
+    const [ selectedCharsId, setSelectedCharsId ] = useState<Array<number>>([0, 2, 11, 14])
+    const [ characterPool, setCharacterPool ] = useState<Array<any>>([{"charId":0,"level":1,"constellation":0,"weaponId":""},{"charId":2,"level":1,"constellation":0,"weaponId":""},{"charId":11,"level":1,"constellation":0,"weaponId":""},{"charId":14,"level":1,"constellation":0,"weaponId":""}])
 
     const characterList = props.assets.length === 0 ? [] : props.assets.characters
     const weaponList = props.assets.length === 0 ? [] : props.assets.weapons
