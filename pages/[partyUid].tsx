@@ -270,6 +270,13 @@ export default function PartyDetail(props) {
                 fetchPool()
                 alert.success(t("PARTY_SAVE_SUCCESS"))
                 setDisableButton(false)
+
+                scroller.scrollTo( "ENDOFLIST", {
+                    duration: 800,
+                    delay: 100,
+                    smooth: true,
+                    offset: -50, 
+                })
             } else {
                 alert.error(t("TRY_AGAIN_LATER"))
                 setDisableButton(false)
@@ -332,7 +339,7 @@ export default function PartyDetail(props) {
                                     <CharacterPane 
                                     char={char}
                                     charInfo={characterList[char.charId]}
-                                    weaponInfo={char.weaponId !== '' && weaponList[char.weaponId]}
+                                    weaponInfo={char.weaponId !== '' && weaponList.filter(v => v.id === char.weaponId)[0]}
                                     party0={party0}
                                     party1={party1}
                                     onClick={() => addCharToParty(char.charId, selectedPartyNumber)}
@@ -354,8 +361,8 @@ export default function PartyDetail(props) {
                                             <CharacterPane 
                                             char={charPoolList.filter(v => v.charId === charId)[0]}
                                             charInfo={characterList[charId]}
-                                            weaponInfo={charPoolList.filter(v => v.charId === charId)[0].weaponId !== '' 
-                                                && weaponList[charPoolList.filter(v => v.charId === charId)[0].weaponId]}
+                                            weaponInfo={charPoolList.filter(v => v.charId === charId)[0].weaponId !== '' //if it is not blank
+                                                && weaponList.filter(v => v.id === charPoolList.filter(v => v.charId === charId)[0].weaponId)[0]}
                                             party0={party0}
                                             party1={party1}
                                             inParty={true}
@@ -380,8 +387,8 @@ export default function PartyDetail(props) {
                                                 <CharacterPane 
                                                 char={charPoolList.filter(v => v.charId === charId)[0]}
                                                 charInfo={characterList[charId]}
-                                                weaponInfo={charPoolList.filter(v => v.charId === charId)[0].weaponId !== '' 
-                                                    && weaponList[charPoolList.filter(v => v.charId === charId)[0].weaponId]}
+                                                weaponInfo={charPoolList.filter(v => v.charId === charId)[0].weaponId !== '' //if it is not blank
+                                                    && weaponList.filter(v => v.id === charPoolList.filter(v => v.charId === charId)[0].weaponId)[0]}
                                                 party0={party0}
                                                 party1={party1}
                                                 inParty={true}
@@ -452,6 +459,7 @@ export default function PartyDetail(props) {
                                         </div>
                                     </RecommendedPartyBox>
                                 ))}
+                                <Element name="ENDOFLIST" />
                             </div>
                         </div>
                     </Col>

@@ -73,7 +73,7 @@ export default function Home() {
             <SubTitle>
               {t("MAIN_TEXT")}
             </SubTitle>
-            <Link href="/3bdb4893f246165e">
+            <Link href="/e585edea7492">
               <SampleLink>
                 See Sample
               </SampleLink>
