@@ -121,7 +121,7 @@ export default function CharacterSetting( props: any ){
                                     value={characterPool.filter(v => v.charId === character.id)[0].weapon}
                                     >
                                         {weapons.filter(v => character.weapon === v.type || v.type === 'none').map((v, index) => (
-                                            <option value={v.id} key={index}>
+                                            <option value={v.id} key={index + v[`name_${i18n.languages}`]}>
                                                 {v[`name_${i18n.languages}`]}
                                             </option>
                                         ))}
