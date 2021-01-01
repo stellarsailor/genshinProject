@@ -54,6 +54,8 @@ export default async (req, res) => {
         const shArray = req.body.shArray
         const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
+        const insertHistoryLog = await db.query(escape`INSERT INTO parties_log (pool_uid, compString, ipAddress) VALUES(${uid}, ${compString}, ${ipAddress});`)
+
         const checkDuplication = await db.query(escape`SELECT COUNT(*) as isExist FROM parties WHERE fhString = ${fhString} AND shString = ${shString};`)
 
         if(checkDuplication[0].isExist === 0){
@@ -63,16 +65,12 @@ export default async (req, res) => {
             `)
             res.status(200).json({ result: insertResult })
         } else {
-            const updateResult = await db.query(escape`UPDATE parties SET likes = likes + 1 WHERE fhString = ${fhString} AND shString = ${shString} AND pool_uid = ${uid};`)
+            const updateResult = await db.query(escape`
+            UPDATE parties 
+            SET likes = likes + 1, updatedAt = now() 
+            WHERE fhString = ${fhString} AND shString = ${shString} AND pool_uid = ${uid};`)
             res.status(200).json({ result: updateResult })
         }
 
-        // if(partyCompArray.length === 8){
-        //     const insertResult = await db.query(escape`
-        //         INSERT INTO parties (pool_uid, compString, c1, c2, c3, c4, c5, c6, c7, c8, ipAddress)
-        //         VALUES ( ${uid}, ${partyCompString} , ${partyCompArray.map(v => `${parseInt(v)},`)}, ${ipAddress});
-        //     `)
-        //     res.status(200).json({ result: insertResult })
-        // }
     }
 }

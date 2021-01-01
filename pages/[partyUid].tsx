@@ -259,6 +259,7 @@ export default function PartyDetail(props) {
                 alert.success(t("PARTY_SAVE_SUCCESS"))
             } else {
                 alert.error(t("TRY_AGAIN_LATER"))
+                setDisableButton(false)
             }
         } catch (e) {
             return e;
