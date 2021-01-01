@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
+import { NextSeo } from 'next-seo';
 
 import { appWithTranslation } from '../i18n'
 import { serverUrl } from "../lib/serverUrl";
@@ -19,6 +20,13 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     background-color: #1d1f29;
     color: white;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
   }
 `
 
@@ -55,6 +63,25 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
+      <NextSeo
+        title="Genshin Party Build Helper"
+        description="This helps you make Genshin party comp and a link to share easily! 원신 파티 조합 도우미"
+        canonical="https://genshinparty.com/"
+        openGraph={{
+          url: 'https://genshinparty.com/',
+          title: 'Genshin Party Build Helper',
+          description: 'This helps you make Genshin party comp and a link to share easily! 원신 파티 조합 도우미',
+          images: [
+            { url: '/images/screenshot.jpg' },
+          ],
+          site_name: 'Genshin Party',
+        }}
+        twitter={{
+          handle: '@handle',
+          site: '@site',
+          cardType: 'summary_large_image',
+        }}
+      />
       <ThemeProvider theme={theme}>
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
