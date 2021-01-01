@@ -86,7 +86,7 @@ export default function Home() {
           </Col>
           <Col sm={12} md={12} lg={5} >
             <div style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '1rem'}}>
-              <img src="/images/screenshot.png" style={{width: '100%', alignSelf: 'center'}} />  
+              <img src="/images/screenshot.jpg" style={{width: '100%', alignSelf: 'center'}} />  
             </div>
           </Col>
         </Row>
