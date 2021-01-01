@@ -121,17 +121,12 @@ export default function CharacterSetting( props: any ){
                                 >
                                     {weapons.filter(v => character.weapon === v.type || v.type === 'none').map((v, index) => (
                                         <option value={v.id} key={index}>
-                                            {v[`name_${i18n.languages}`]}
+                                            {v[`name_${i18n.language}`]}
                                         </option>
                                     ))}
                                 </select>
                                 
                             }
-                            {weapons.filter(v => character.weapon === v.type || v.type === 'none').map((v, index) => (
-                                        <option value={v.id} key={index}>
-                                            {v[`name_${i18n.languages}`]}
-                                        </option>
-                                    ))}
                         </div>
                     </span>
                 }
