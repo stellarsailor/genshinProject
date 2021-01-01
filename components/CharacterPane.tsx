@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useTranslation, Router, Link } from '../i18n';
+import FirstLetterToLower from '../logics/FirstLetterToLower'
 
 const MainContainer = styled.div`
     width: 120px;
@@ -171,7 +172,7 @@ export default function CharacterPane( props: any ){
     return (
         <MainContainer onClick={onClick}>
             <TopLeftBox>
-                <img src={`/images/elements/${charInfo.element}.png`} width="100%" height="100%" />
+                <img src={`/images/elements/${FirstLetterToLower(charInfo.element)}.png`} width="100%" height="100%" />
             </TopLeftBox>
             { weaponInfo && 
                 <BottomWeaponNameBox>
@@ -179,7 +180,7 @@ export default function CharacterPane( props: any ){
                 </BottomWeaponNameBox>
             }
             <CharacterBox stars={charInfo.stars}>
-                <img src={`/images/characters/${charInfo.name_en}.png`} width="100%" style={{marginBottom: 20}} />
+                <img src={`/images/characters/${FirstLetterToLower(charInfo.name_en)}.png`} width="100%" style={{marginBottom: 20}} />
             </CharacterBox>
             <BottomBox>
                 <BottomText>

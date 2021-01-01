@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { Col, Row } from 'react-grid-system'
 import styled from 'styled-components'
 import { useTranslation } from '../i18n'
+import FirstLetterToLower from '../logics/FirstLetterToLower'
 
 type selectedType = {
     isSelected: boolean;
@@ -66,7 +67,7 @@ export default function CharacterSetting( props: any ){
             </Col>
             <Col md={12} style={{display: 'flex', flexDirection: 'row'}}>
                 <img 
-                src={`/images/characters/${character.name_en}.png`} 
+                src={`/images/characters/${FirstLetterToLower(character.name_en)}.png`} 
                 width="40px" 
                 height="40px" 
                 style={{cursor: 'pointer', filter: selectedCharsId.includes(character.id) ? 'grayscale(0%)' : 'grayscale(100%)'}} onClick={() => handleCharacterPool(character.id)} 
