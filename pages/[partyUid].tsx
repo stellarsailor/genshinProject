@@ -197,8 +197,12 @@ export default function PartyDetail(props) {
     },[partyMode])
 
     const createCurrentPartyString = useCallback(() => {
-        return serverUrl + `/${i18n.language}/${partyUid}?p=` + makeCompString(party0, false) + makeCompString(party1, false)
-    },[ party0, party1 ])
+        if(partyMode === 1){
+            return serverUrl + `/${i18n.language}/${partyUid}?p=` + makeCompString(party0, false)
+        } else {
+            return serverUrl + `/${i18n.language}/${partyUid}?p=` + makeCompString(party0, false) + makeCompString(party1, false)
+        }
+    },[ party0, party1, partyMode ])
 
     const addCharToParty = useCallback((charId, partyId) => {
         if(partyId === 0){
