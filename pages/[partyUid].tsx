@@ -474,13 +474,3 @@ export default function PartyDetail(props) {
         </Row>
     )
 }
-
-// export async function getServerSideProps({ params, req }) {
-
-    // let url = `${serverUrl}/api/bingos/${params.bingoId}`
-
-    // const res = await fetch(url)
-    // const data = await res.json()
-
-    // return { props: { data } }
-// }

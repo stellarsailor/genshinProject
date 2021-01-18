@@ -203,4 +203,11 @@ export const characters: Array<charcterType> = [
         element: 'Geo',
         weapon: 'Polearm'
     },
+    {
+        name_en: 'Ganyu',
+        name_ko: '감우',
+        stars: 5,
+        element: 'Cryo',
+        weapon: 'Bow'
+    },
 ]
