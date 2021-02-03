@@ -210,4 +210,11 @@ export const characters: Array<charcterType> = [
         element: 'Cryo',
         weapon: 'Bow'
     },
+    {
+        name_en: 'Xiao',
+        name_ko: '소',
+        stars: 5,
+        element: 'Anemo',
+        weapon: 'Polearm'
+    },
 ]
