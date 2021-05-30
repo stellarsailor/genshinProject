@@ -145,7 +145,6 @@ export default function PartyDetail(props) {
     const [ disableButton, setDisableButton ] = useState(false)
 
     async function fetchPool() {
-        
         let url = `${serverUrl}/api/pools?uid=${partyUid}`
     
         const res = await fetch(url)
